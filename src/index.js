@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { forwardRef } from 'react';
 import './index.css';
 
@@ -138,10 +138,13 @@ class Game extends React.Component {
     const current = history[history.length - 1];
 
     while (true) {
-      const random = Math.floor(Math.random() * 9);
+      const randomNum = Math.floor(Math.random() * 9);
 
-      if (current.squares[random] !== 'X' && current.squares[random] !== 'O') {
-        this._child.current.clickSquare(random);
+      if (
+        current.squares[randomNum] !== 'X' &&
+        current.squares[randomNum] !== 'O'
+      ) {
+        this._child.current.clickSquare(randomNum);
         return;
       }
     }
@@ -150,6 +153,11 @@ class Game extends React.Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
+      // history: [
+      //   {
+      //     squares: Array(9).fill(null)
+      //   }
+      // ],
       xIsNext: step % 2 === 0
     });
   }
@@ -194,8 +202,9 @@ class Game extends React.Component {
 }
 
 // ========================================
-
-ReactDOM.render(<Game />, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Game />);
+//ReactDOM.render(<Game />, document.getElementById('root'));
 
 function calculateWinner(squares) {
   const lines = [
