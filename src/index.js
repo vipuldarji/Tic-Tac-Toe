@@ -3,14 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { forwardRef } from 'react';
 import './index.css';
 
-function getWinnerString(winner) {
-  if (winner === 'X') {
-    return 'Player';
-  } else {
-    return 'Computer';
-  }
-}
-
 const Square = forwardRef((props, ref) => {
   return (
     <button ref={ref} className='square' onClick={props.onClick}>
@@ -28,26 +20,6 @@ class Board extends React.Component {
         onClick={() => this.props.onClick(i)}
       />
     );
-  }
-
-  squares = [];
-  constructor(props) {
-    super(props);
-    this.squares = [
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef()
-    ];
-  }
-
-  clickSquare(i) {
-    this.squares[i].current.click();
   }
 
   render() {
@@ -70,6 +42,26 @@ class Board extends React.Component {
         </div>
       </div>
     );
+  }
+
+  squares = [];
+  constructor(props) {
+    super(props);
+    this.squares = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef()
+    ];
+  }
+
+  clickSquare(i) {
+    this.squares[i].current.click();
   }
 }
 
@@ -109,31 +101,30 @@ class Game extends React.Component {
 
     if (this.state.xIsNext) {
       this.forceUpdate(() => {
-        if (!this.eightFull()) {
-          this.moveRandom();
+        if (!this.fullEightSquare()) {
+          this.randomBox();
         }
       });
     }
   }
 
-  eightFull() {
+  fullEightSquare() {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
-
-    let filled = 0;
+    let filledBox = 0;
 
     for (let i = 0; i < 9; i++) {
       if (current.squares[i] === 'X' || current.squares[i] === 'O') {
-        filled++;
+        filledBox++;
       }
     }
-    if (filled >= 8) {
+    if (filledBox >= 8) {
       return true;
     }
     return false;
   }
 
-  moveRandom() {
+  randomBox() {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
 
@@ -198,6 +189,13 @@ class Game extends React.Component {
         </div>
       </div>
     );
+  }
+}
+function getWinnerString(winner) {
+  if (winner === 'X') {
+    return 'Player';
+  } else {
+    return 'Computer';
   }
 }
 
